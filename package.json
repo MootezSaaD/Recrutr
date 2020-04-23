@@ -1,0 +1,23 @@
+{
+  "name": "recruitmentsystem",
+  "version": "1.0.0",
+  "description": "Part of CS331 and MATH348 courses at MedTech",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MootezSaaD/RecruitmentSystem.git"
+  },
+  "keywords": [
+    "recruitement",
+    "system"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MootezSaaD/RecruitmentSystem/issues"
+  },
+  "homepage": "https://github.com/MootezSaaD/RecruitmentSystem#readme"
+}
