@@ -4,8 +4,7 @@
   "description": "Part of CS331 and MATH348 courses at MedTech",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "cross-env DEBUG=express-sequelize nodemon ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -32,9 +31,12 @@
     "mariadb": "^2.3.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "sequelize": "^5.21.7"
+    "sequelize": "^5.21.7",
+    "sequelize-cli": "^5.5.1"
   },
   "devDependencies": {
+    "babel-register": "^6.26.0",
+    "cross-env": "^7.0.2",
     "nodemon": "^2.0.3"
   }
 }

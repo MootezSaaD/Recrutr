@@ -29,6 +29,4 @@ app.use(function(err, req, res, next) {
 
 // app.use('/api/', userRoute);
 
-app.listen(PORT, () => {
-  console.log("[X] Server is running");
-});
+module.exports = app;
