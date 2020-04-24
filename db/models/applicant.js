@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     Applicant.belongsTo(models.User);
     
     Applicant.hasOne(models.Application);
+    Applicant.hasOne(models.WorkExperience);
 
     Applicant.belongsToMany(models.Skill, { through: models.ApplicantSkill });
     Applicant.hasMany(models.ApplicantSkill);

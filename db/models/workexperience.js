@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   WorkExperience.associate = function (models) {
     WorkExperience.belongsTo(models.Domain);
+    WorkExperience.belongsTo(models.Applicant);
   };
   return WorkExperience;
 };

@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require('helmet');
-const config = require('./config/env');
 const passport = require("passport");
 
 const app = express();
@@ -17,8 +16,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./config/passport')(passport);
-
-const PORT = process.env.PORT || 3000;
 
 // Temporary error handler
 app.use(function(err, req, res, next) {
