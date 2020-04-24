@@ -9,5 +9,5 @@ module.exports = (sequelize, DataTypes) => {
     JobOfferSkill.belongsTo(models.JobOffer);
     JobOfferSkill.belongsTo(models.Skill);
   };
-  return Skill;
+  return JobOfferSkill;
 };
