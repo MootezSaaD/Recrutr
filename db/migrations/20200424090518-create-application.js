@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Degrees", {
+    return queryInterface.createTable("Applications", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,11 +11,17 @@ module.exports = {
       applicantId: {
         type: Sequelize.INTEGER,
       },
-      domainId: {
+      jobId: {
         type: Sequelize.INTEGER,
       },
-      type: {
-        type: Sequelize.ENUM,
+      userId: {
+        type: Sequelize.INTEGER,
+      },
+      status: {
+        type: Sequelize.STRING,
+      },
+      cv: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -28,6 +34,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("Degrees");
+    return queryInterface.dropTable("Applications");
   },
 };
