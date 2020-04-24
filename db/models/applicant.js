@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
   const Applicant = sequelize.define(
     "Applicant",
     {
-      userId: DataTypes.INTEGER,
       phoneNumber: DataTypes.STRING,
     },
     {}
