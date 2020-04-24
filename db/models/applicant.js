@@ -4,8 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     "Applicant",
     {
       userId: DataTypes.INTEGER,
-      degreeId: DataTypes.INTEGER,
-      applicationId: DataTypes.INTEGER,
       phoneNumber: DataTypes.STRING,
     },
     {}

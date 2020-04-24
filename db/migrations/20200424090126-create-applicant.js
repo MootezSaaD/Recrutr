@@ -11,12 +11,6 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
       },
-      degreeId: {
-        type: Sequelize.INTEGER,
-      },
-      applicationId: {
-        type: Sequelize.INTEGER,
-      },
       phoneNumber: {
         type: Sequelize.STRING,
       },
