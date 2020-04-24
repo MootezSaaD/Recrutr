@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Recruiter.associate = function (models) {
-    // associations can be defined here
+    Recruiter.belongsTo(models.User);
+    Recruiter.belongsTo(models.Company);
   };
   return Recruiter;
 };

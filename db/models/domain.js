@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING
   }, {});
   Domain.associate = function(models) {
-    // associations can be defined here
+    Domain.hasOne(models.JobOffer);
+    Domain.hasOne(models.WorkExperience);
   };
   return Domain;
 };

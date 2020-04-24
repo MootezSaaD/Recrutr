@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   JobOffer.associate = function (models) {
-    // associations can be defined here
+    JobOffer.belongsTo(models.Company);
+    JobOffer.belongsTo(models.Domain);
+    JobOffer.hasOne(models.Application);
+
     JobOffer.belongsToMany(models.Skill, { through: models.JobOfferSkill });
     JobOffer.hasMany(models.JobOfferSkill);
   };

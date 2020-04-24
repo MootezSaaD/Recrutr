@@ -9,7 +9,15 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Applicant.associate = function (models) {
-    // associations can be defined here
+    Applicant.belongsTo(models.User);
+    
+    Applicant.hasOne(models.Application);
+
+    Applicant.belongsToMany(models.Skill, { through: models.ApplicantSkill });
+    Applicant.hasMany(models.ApplicantSkill);
+
+    Applicant.belongsToMany(models.Degree, { through: models.ApplicantDegree });
+    Applicant.hasMany(models.ApplicantDegree);
   };
   return Applicant;
 };

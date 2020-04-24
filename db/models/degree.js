@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Degree.associate = function (models) {
-    // associations can be defined here
+    Degree.belongsToMany(models.Applicant, { through: models.ApplicantDegree });
+    Degree.hasMany(models.ApplicantDegree);
   };
   return Degree;
 };

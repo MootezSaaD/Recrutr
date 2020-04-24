@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   WorkExperience.associate = function (models) {
-    // associations can be defined here
+    WorkExperience.belongsTo(models.Domain);
   };
   return WorkExperience;
 };
