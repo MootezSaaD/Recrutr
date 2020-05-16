@@ -1,9 +1,9 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const helmet = require('helmet');
-const passport = require("passport");
-
+const passport = require('passport');
+const usersRoutes = require('./routes/users');
 const app = express();
 
 app.use(helmet());
@@ -24,6 +24,6 @@ app.use(function(err, req, res, next) {
   res.status(err.statusCode).send({ error: err.message });
 });
 
-// app.use('/api/', userRoute);
+app.use('/api/user', usersRoutes);
 
 module.exports = app;

@@ -1,3 +1,5 @@
+const dotenv = require('dotenv').config();
+
 module.exports = {
   development: {
     username: process.env.DB_USERNAME,
@@ -5,7 +7,7 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOSTNAME,
     port: process.env.DB_PORT,
-    dialect: process.env.DB_DIALEC,
+    dialect: process.env.DB_DIALECT,
     dialectOptions: {
       timezone: process.env.db_timezone
     },
@@ -16,7 +18,7 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOSTNAME,
     port: process.env.DB_PORT,
-    dialect: process.env.DB_DIALEC,
+    dialect: process.env.DB_DIALECT,
     dialectOptions: {
       timezone: process.env.db_timezone
     },
@@ -27,7 +29,7 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOSTNAME,
     port: process.env.DB_PORT,
-    dialect: process.env.DB_DIALEC,
+    dialect: process.env.DB_DIALECT,
     dialectOptions: {
       timezone: process.env.DB_TIMEZONE
     },

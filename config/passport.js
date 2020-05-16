@@ -9,7 +9,7 @@ module.exports = function(passport) {
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
   passport.use(
     new JwtStrategy(opts, function(jwt_payload, done) {
-      /*UsersService.getUserById(jwt_payload._id)
+      UsersService.getUserById(jwt_payload._id)
         .catch(function(err) {
           if (err) {
             return done(err, false);
@@ -23,7 +23,6 @@ module.exports = function(passport) {
             return done(null, false);
           }
         });
-      */
     })
   );
 };
