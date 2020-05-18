@@ -8,6 +8,7 @@ dotenv.config();
 module.exports =  {
   port: process.env.PORT,
   secret: process.env.SECRET,
+  tokenExpiration: process.env.TOKEN_EXPIRATION,
   mail: {
     apiKey: process.env.MAIL_API_KEY,
     sender: process.env.MAIL_SENDER,

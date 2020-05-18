@@ -1,5 +1,5 @@
 const sequelize = require('sequelize')
-const { User } = require('../db/models')
+const { User, Applicant, Recruiter } = require('../db/models')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -11,13 +11,13 @@ function usersService() {
     return User.findOne( { where:{ id: id } })
   }
 
-  async function addUser(userData) {
-    return User.create(userData);
-  }
-
   async function getUserByEmail(email) {
     const query = { email: email };
     return User.findOne({ where: query });
+  }
+
+  async function addUser(userData) {
+    return User.create(userData);
   }
 
   async function register(resBody) {
@@ -25,11 +25,18 @@ function usersService() {
       firstName: resBody.firstName.trim(),
       lastName: resBody.lastName.trim(),
       email: resBody.email.trim(),
-      password: ''
+      password: bcrypt.hashSync(resBody.password, 10)
     };
-    let hash = bcrypt.hashSync(resBody.password, 10)
-    newUser.password = hash;
-    await addUser(userData);
+    let user = await addUser(newUser);
+    
+    if (resBody.userType === 'Applicant') {
+      await user.createApplicant({phoneNumber: resBody.phoneNumber});
+    } else if (resBody.userType === 'Recruiter') {
+      let recruiter = await user.createRecruiter();
+      await recruiter.createCompany(resBody.company);
+    } else {
+      throw Error('Invalid user type');
+    }
   }
 
   async function login(resBody) {
@@ -40,7 +47,7 @@ function usersService() {
     const match = await bcrypt.compare(resBody.password, user.password);
     if (!match) throw Error;
     const token = jwt.sign(user.toJSON(), config.secret, {
-      expiresIn: 3600
+      expiresIn: config.tokenExpiration
     });
     return {
       user: {

@@ -9,7 +9,11 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Application.associate = function (models) {
-    Application.belongsTo(models.Applicant);
+    Application.belongsTo(models.Applicant, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
     Application.belongsTo(models.JobOffer);
   };
   return Application;
