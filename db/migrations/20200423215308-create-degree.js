@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       type: {
-        type: Sequelize.ENUM,
+        type: Sequelize.ENUM("Bsc", "MSc", "PhD"),
       },
       createdAt: {
         allowNull: false,
