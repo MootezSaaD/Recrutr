@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const UsersService = require("../services/users.service")();
-const passport = require("passport");
 
 router.post("/register", async (req, res, next) => {
   const resBody = req.body;

@@ -20,12 +20,11 @@ function usersService() {
   }
 
   async function getRole(userEmail) {
-    const query = { UserEmail: userEmail };
-    const res = await Applicant.findOne({ where: query });
-    if (res) {
-      return "Applicant";
+    const user = await getUserByEmail(userEmail);
+    if (user) {
+      return user.role;
     } else {
-      return "Recruiter";
+      return undefined;
     }
   }
 
@@ -36,11 +35,13 @@ function usersService() {
       email: resBody.email.trim(),
       password: bcrypt.hashSync(resBody.password, 10),
     };
-    let user = await addUser(newUser);
-
-    if (resBody.userType === "Applicant") {
+    if (resBody.userType.toLowerCase() === "applicant") {
+      newUser["role"] = "applicant";
+      let user = await addUser(newUser);
       await user.createApplicant({ phoneNumber: resBody.phoneNumber });
-    } else if (resBody.userType === "Recruiter") {
+    } else if (resBody.userType.toLowerCase() === "recruiter") {
+      newUser["role"] = "recruiter";
+      let user = await addUser(newUser);
       let recruiter = await user.createRecruiter();
       await recruiter.createCompany(resBody.company);
     } else {
