@@ -21,7 +21,12 @@ function usersService() {
 
   async function getRole(userEmail) {
     const query = { UserEmail: userEmail };
-    return Applicant.findOne({ where: query }) ? "Applicant" : "Recruiter";
+    const res = await Applicant.findOne({ where: query });
+    if (res) {
+      return "Applicant";
+    } else {
+      return "Recruiter";
+    }
   }
 
   async function register(resBody) {
@@ -59,7 +64,7 @@ function usersService() {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        userType,
+        userType: userType,
         token: token,
       },
     };
@@ -71,6 +76,7 @@ function usersService() {
     addUser,
     register,
     login,
+    getRole,
   };
 }
 
