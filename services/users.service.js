@@ -1,14 +1,13 @@
-const sequelize = require('sequelize')
-const { User, Applicant, Recruiter } = require('../db/models')
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const sequelize = require("sequelize");
+const { User, Applicant, Recruiter } = require("../db/models");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const config = require('../config/env')
+const config = require("../config/env");
 
 function usersService() {
-  
   async function getUserById(id) {
-    return User.findOne( { where:{ id: id } })
+    return User.findOne({ where: { id: id } });
   }
 
   async function getUserByEmail(email) {
@@ -20,42 +19,49 @@ function usersService() {
     return User.create(userData);
   }
 
+  async function getRole(userEmail) {
+    const query = { UserEmail: userEmail };
+    return Applicant.findOne({ where: query }) ? "Applicant" : "Recruiter";
+  }
+
   async function register(resBody) {
     let newUser = {
       firstName: resBody.firstName.trim(),
       lastName: resBody.lastName.trim(),
       email: resBody.email.trim(),
-      password: bcrypt.hashSync(resBody.password, 10)
+      password: bcrypt.hashSync(resBody.password, 10),
     };
     let user = await addUser(newUser);
-    
-    if (resBody.userType === 'Applicant') {
-      await user.createApplicant({phoneNumber: resBody.phoneNumber});
-    } else if (resBody.userType === 'Recruiter') {
+
+    if (resBody.userType === "Applicant") {
+      await user.createApplicant({ phoneNumber: resBody.phoneNumber });
+    } else if (resBody.userType === "Recruiter") {
       let recruiter = await user.createRecruiter();
       await recruiter.createCompany(resBody.company);
     } else {
-      throw Error('Invalid user type');
+      throw Error("Invalid user type");
     }
   }
 
   async function login(resBody) {
     const user = await getUserByEmail(resBody.email);
     if (!user) {
-      throw Error('User not found');
+      throw Error("User not found");
     }
     const match = await bcrypt.compare(resBody.password, user.password);
     if (!match) throw Error;
     const token = jwt.sign(user.toJSON(), config.secret, {
-      expiresIn: config.tokenExpiration
+      expiresIn: config.tokenExpiration,
     });
+    let userType = await getRole(resBody.email);
     return {
       user: {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        token: token
-      }
+        userType,
+        token: token,
+      },
     };
   }
 
@@ -64,7 +70,7 @@ function usersService() {
     getUserByEmail,
     addUser,
     register,
-    login
+    login,
   };
 }
 
