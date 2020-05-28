@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const jobsService = require("../services/jobs.service")();
 const permit = require("../middlewares/permissions");
 
 /**
@@ -25,7 +26,7 @@ router.post(
     // Fetch the recruiter's info
     // First check the if caller is a recruiter
     try {
-      await jobsService.createJob(req.body);
+      await jobsService.createJob(req.body, req.user);
       res.send({ success: true });
     } catch {
       res.status(401).send({

@@ -1,12 +1,28 @@
-const { JobOffer, Domain } = require("../db/models");
+const { JobOffer, Domain, Skill } = require('../db/models');
+const recruitersService = require('../services/recruiters.service')();
 
 function jobsService() {
-  async function createDomain(name) {
-    return Domain.create(name);
+  async function storeDomain(domainName) {
+    const [domain, created] = await Domain.findOrCreate({
+      where: { name: domainName },
+      defaults: {
+        name: domainName,
+      },
+    });
+    return domain;
+  }
+  async function createJobOffer(jobOffer) {
+    return JobOffer.create(jobOffer);
   }
 
-  async function createJob(reqBody) {
-    let payload = req.body;
+  async function createSkills(skillsArr) {
+    // Returns an array of the created skills
+  }
+
+  async function createJob(reqBody, user) {
+    let recruiter = await recruitersService.getRecruiter(user.email);
+    let company = await recruitersService.getCompany(recruiter.CompanyId);
+    let payload = reqBody;
     let skills = [];
     // Skills are recevied as an object
     // transform it to array
@@ -15,19 +31,25 @@ function jobsService() {
     });
     delete payload.skils;
     payload.skills = skills;
-    // Save job skills in the db using findOrCreate() #https://sequelize.org/master/manual/model-querying-finders.html
-    // so if a skill is already stored in db , it won't add it, could be used also for the "domain", since many
-    // job offers can belong to the same domain
-
-    //Now get the recruiter's company
-
-    //Finish by inserting every thing in the db.
-    // wassalem (normalement..)
+    // Create domain (didn't use the special method between models since I don't how it handles duplicates)
+    let domain = await storeDomain(reqBody.domain);
+    // Create job offer
+    let jobOffer = await createJobOffer({
+      title: reqBody.title,
+      description: reqBody.description,
+      startDate: reqBody.startDate,
+      endDate: reqBody.endDate,
+    });
+    // Set the job offer's domain and company
+    jobOffer.setDomain(domain);
+    jobOffer.setCompany(company);
+    // Set the job skills
   }
-  
-  return { 
-    createDomain,
-    createJob
+
+  return {
+    storeDomain,
+    createJob,
+    createJobOffer,
   };
 }
 
