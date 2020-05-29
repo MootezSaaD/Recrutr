@@ -59,7 +59,7 @@ function jobsService() {
 
     // Creates and returns all created entries in an array
     // If the entry is already found, it is append to the array.
-    let skillsArr = await storeskills(reqBody.skills);
+    let skillsArr = await storeSkills(reqBody.skills);
 
     // Method provided by sequelizer in case of a many-to-many relationship
     await jobOffer.setSkills(skillsArr);
