@@ -2,37 +2,48 @@ const { JobOffer, Domain, Skill } = require('../db/models');
 const recruitersService = require('../services/recruiters.service')();
 
 function jobsService() {
-  async function storeDomain(domainName) {
+  // Assuming domain is an object, this would be the correct syntax
+  async function storeDomain(domain) {
     const [domain, created] = await Domain.findOrCreate({
-      where: { name: domainName },
+      where: { name: domain.name },
       defaults: {
-        name: domainName,
+        name: domain.name,
       },
     });
     return domain;
   }
+
   async function createJobOffer(jobOffer) {
     return JobOffer.create(jobOffer);
   }
 
-  async function createSkills(skillsArr) {
-    // Returns an array of the created skills
+  async function storeSkill(skill) {
+    const [skill, created] = await Skill.findOrCreate({
+      where: { name: skill.name, type: skill.type },
+      defaults: {
+        name: skill.name,
+        type: skill.type
+      },
+    });
+    return skill;
+  }
+
+  async function storeSkills(skills) {
+    let skillsArr = [];
+    skills.forEach((skill) => {
+      let skill = await storeSkill(skill);
+      skillsArr.push(skill);
+    })
+    return skillsArr;
   }
 
   async function createJob(reqBody, user) {
     let recruiter = await recruitersService.getRecruiter(user.email);
     let company = await recruitersService.getCompany(recruiter.CompanyId);
-    let payload = reqBody;
-    let skills = [];
-    // Skills are recevied as an object
-    // transform it to array
-    Object.values(payload.skills).forEach((skill) => {
-      skills.push(skill);
-    });
-    delete payload.skils;
-    payload.skills = skills;
+
     // Create domain (didn't use the special method between models since I don't how it handles duplicates)
     let domain = await storeDomain(reqBody.domain);
+
     // Create job offer
     let jobOffer = await createJobOffer({
       title: reqBody.title,
@@ -40,10 +51,17 @@ function jobsService() {
       startDate: reqBody.startDate,
       endDate: reqBody.endDate,
     });
+
     // Set the job offer's domain and company
-    jobOffer.setDomain(domain);
-    jobOffer.setCompany(company);
-    // Set the job skills
+    await jobOffer.setDomain(domain);
+    await jobOffer.setCompany(company);
+
+    // Creates and returns all created entries in an array
+    // If the entry is already found, it is append to the array.
+    let skillsArr = await storeskills(reqBody.skills);
+
+    // Method provided by sequelizer in case of a many-to-many relationship
+    await jobOffer.setSkills(skillsArr);
   }
 
   return {
