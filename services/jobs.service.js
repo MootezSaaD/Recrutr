@@ -4,7 +4,7 @@ const recruitersService = require('../services/recruiters.service')();
 function jobsService() {
   // Assuming domain is an object, this would be the correct syntax
   async function storeDomain(domain) {
-    const [domain, created] = await Domain.findOrCreate({
+    [domain, created] = await Domain.findOrCreate({
       where: { name: domain.name },
       defaults: {
         name: domain.name,
@@ -18,7 +18,7 @@ function jobsService() {
   }
 
   async function storeSkill(skill) {
-    const [skill, created] = await Skill.findOrCreate({
+    [skill, created] = await Skill.findOrCreate({
       where: { name: skill.name, type: skill.type },
       defaults: {
         name: skill.name,
@@ -31,8 +31,9 @@ function jobsService() {
   async function storeSkills(skills) {
     let skillsArr = [];
     skills.forEach((skill) => {
-      let skill = await storeSkill(skill);
-      skillsArr.push(skill);
+      storeSkill(skill).then((skill) => {
+        skillsArr.push(skill);
+      });
     })
     return skillsArr;
   }
