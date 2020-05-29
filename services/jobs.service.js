@@ -3,11 +3,11 @@ const recruitersService = require('../services/recruiters.service')();
 
 function jobsService() {
   // Assuming domain is an object, this would be the correct syntax
-  async function storeDomain(domain) {
+  async function storeDomain(domainName) {
     [domain, created] = await Domain.findOrCreate({
-      where: { name: domain.name },
+      where: { name: domainName },
       defaults: {
-        name: domain.name,
+        name: domainName,
       },
     });
     return domain;

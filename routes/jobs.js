@@ -28,7 +28,7 @@ router.post(
     try {
       await jobsService.createJob(req.body, req.user);
       res.send({ success: true });
-    } catch {
+    } catch(err) {
       res.status(401).send({
         success: false,
         message: err.msg,
