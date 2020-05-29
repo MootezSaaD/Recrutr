@@ -30,7 +30,7 @@ function jobsService() {
 
   async function storeSkills(skills) {
     let skillsArr = [];
-    skills.forEach((skill) => {
+    Object.values(skills).forEach((skill) => {
       storeSkill(skill).then((skill) => {
         skillsArr.push(skill);
       });
@@ -60,7 +60,7 @@ function jobsService() {
     // Creates and returns all created entries in an array
     // If the entry is already found, it is append to the array.
     let skillsArr = await storeSkills(reqBody.skills);
-
+    console.log("Array of skills", skillsArr);
     // Method provided by sequelizer in case of a many-to-many relationship
     await jobOffer.setSkills(skillsArr);
   }
