@@ -46,11 +46,10 @@ function jobsService() {
 
   async function storeSkills(skills) {
     let skillsArr = [];
-    Object.values(skills).forEach((skill) => {
-      storeSkill(skill).then((skill) => {
-        skillsArr.push(skill);
-      });
-    })
+    for (const skill of skills) {
+      const result = await storeSkill(skill);
+      skillsArr.push(result);
+    }
     return skillsArr;
   }
 
