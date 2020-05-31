@@ -7,10 +7,8 @@ function jobsService() {
     return JobOffer.findOne({ where: query });
   }
 
-  async function getCompanyJobs(user) {
-    let recruiter = await user.getRecruiter();
-    let company = await recruiter.getCompany();
-    return company.getJobOffers();
+  async function getJobs() {
+    return JobOffer.findAll();
   }
 
   async function deleteJobById(id) {
@@ -82,7 +80,7 @@ function jobsService() {
 
   return {
     getJobById,
-    getCompanyJobs,
+    getJobs,
     deleteJobById,
     storeDomain,
     createJob,

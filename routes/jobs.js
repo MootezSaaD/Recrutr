@@ -6,10 +6,10 @@ const { permit, isCompanyRecruiter } = require("../middlewares/permissions");
 
 router.get(
   "/",
-  [passport.authenticate("jwt", { session: false }), permit('recruiter')],
+  [passport.authenticate("jwt", { session: false })],
   async (req, res, next) => {
     try {
-      let jobOffers = await jobsService.getCompanyJobs(req.user);
+      let jobOffers = await jobsService.getJobs(req.user);
       res.json(jobOffers);
     } catch(err) {
       res.status(500).send({

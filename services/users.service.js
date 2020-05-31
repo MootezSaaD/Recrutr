@@ -1,5 +1,4 @@
-const sequelize = require("sequelize");
-const { User, Applicant, Recruiter } = require("../db/models");
+const { User } = require("../db/models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 

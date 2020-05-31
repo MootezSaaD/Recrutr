@@ -1,4 +1,4 @@
-const { Recruiter, Company } = require('../db/models');
+const { Recruiter } = require('../db/models');
 
 function recruitersService() {
   async function getRecruiter(email) {
@@ -6,11 +6,13 @@ function recruitersService() {
     return Recruiter.findOne({ where: query });
   }
 
-  async function getCompany(recruiterID) {
-    const query = { id: recruiterID };
-    return Company.findOne({ where: query });
+  async function getCompanyJobs(user) {
+    let recruiter = await user.getRecruiter();
+    let company = await recruiter.getCompany();
+    return company.getJobOffers();
   }
-  return { getRecruiter, getCompany };
+
+  return { getRecruiter, getCompanyJobs };
 }
 
 module.exports = recruitersService;

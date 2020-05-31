@@ -3,10 +3,12 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const passport = require("passport");
-const usersRoutes = require("./routes/users");
-const jobsRoutes = require("./routes/jobs");
-const domainsRoutes = require("./routes/domains");
-const skillsRoutes = require("./routes/skills");
+const userRoutes = require("./routes/users");
+const jobRoutes = require("./routes/jobs");
+const applicantRoutes = require("./routes/applicants");
+const recruiterRoutes = require("./routes/recruiters");
+const domainRoutes = require("./routes/domains");
+const skillRoutes = require("./routes/skills");
 
 const app = express();
 
@@ -28,9 +30,12 @@ app.use(function (err, req, res, next) {
   res.status(err.statusCode).send({ error: err.message });
 });
 
-app.use("/api/user", usersRoutes);
-app.use("/api/job", jobsRoutes);
-app.use("/api/domains", domainsRoutes);
-app.use("/api/skills", skillsRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/applicants", applicantRoutes);
+app.use("/api/recruiters", recruiterRoutes);
+
+app.use("/api/jobs", jobRoutes);
+app.use("/api/domains", domainRoutes);
+app.use("/api/skills", skillRoutes);
 
 module.exports = app;
