@@ -1,4 +1,4 @@
-const { User } = require("../db/models");
+const { User, Company } = require("../db/models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -21,7 +21,25 @@ function usersService() {
   async function getRole(userEmail) {
     const user = await getUserByEmail(userEmail);
     if (user) {
-      return user.role;
+      if(user.role.toLowerCase() == "recruiter") {
+        let recruiter = await user.getRecruiter();
+        let rectInfo = {
+          userType: user.role,
+          // Need to convert to JSON since the returned object is translated to Company
+          // model instance
+          company: await recruiter.getCompany().then(company => company.toJSON())
+        } 
+        // Delete unnecessary data
+        delete rectInfo.company.createdAt;
+        delete rectInfo.company.updatedAt;
+        return rectInfo;
+      }
+      let applicantInfo = {
+        userType: user.role,
+        phoneNumber: await user.getApplicant().then(applicant => applicant.toJSON())
+      }
+      applicantInfo.phoneNumber = applicantInfo.phoneNumber.phoneNumber;
+      return applicantInfo
     } else {
       return undefined;
     }
@@ -58,13 +76,13 @@ function usersService() {
     const token = jwt.sign(user.toJSON(), config.secret, {
       expiresIn: config.tokenExpiration,
     });
-    let userType = await getRole(resBody.email);
+    let userInfo = await getRole(resBody.email);
     return {
       user: {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        userType: userType,
+        ...userInfo,
         token: token,
       },
     };
