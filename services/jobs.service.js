@@ -8,7 +8,25 @@ function jobsService() {
   }
 
   async function getJobs() {
-    return JobOffer.findAll();
+    let jobsOffers = await JobOffer.findAll({
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+    });
+    let finalJobOffers = [];
+    for(let jobOffer of jobsOffers) {
+      let jobOfferSkills = await jobOffer.getJobOfferSkills();
+      let skillsArr = [];
+      for(let jobOfferSkill of jobOfferSkills) {
+        let s = await jobOfferSkill.getSkill().then(skill => skill.toJSON());
+        delete s.createdAt;
+        delete s.updatedAt;
+        skillsArr.push(s)
+      }
+      finalJobOffers.push(
+        Object.assign(jobOffer.toJSON(), { skills: skillsArr })
+      );
+    }
+
+    return finalJobOffers;
   }
 
   async function deleteJobById(id) {
