@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     sector: DataTypes.STRING
   }, {});
   Company.associate = function(models) {
-    Company.hasOne(models.Recruiter);
+    Company.hasMany(models.Recruiter);
     Company.hasMany(models.JobOffer);
   };
   return Company;

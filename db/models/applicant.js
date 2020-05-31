@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
   Applicant.associate = function (models) {
     Applicant.belongsTo(models.User);
     
-    Applicant.hasOne(models.Application);
-    Applicant.hasOne(models.WorkExperience);
+    Applicant.hasMany(models.Application);
+    Applicant.hasMany(models.WorkExperience);
 
     Applicant.belongsToMany(models.Skill, { through: models.ApplicantSkill });
     Applicant.hasMany(models.ApplicantSkill);
