@@ -2,6 +2,16 @@ const { JobOffer, Domain, Skill } = require('../db/models');
 const recruitersService = require('../services/recruiters.service')();
 
 function jobsService() {
+  async function getJobById(id) {
+    const query = { id: id };
+    return JobOffer.findOne({ where: query });
+  }
+
+  async function deleteJobById(id) {
+    const query = { id: id };
+    return JobOffer.destroy({ where: query });
+  }
+
   // Assuming domain is an object, this would be the correct syntax
   async function storeDomain(domainName) {
     [domain, created] = await Domain.findOrCreate({
@@ -60,12 +70,14 @@ function jobsService() {
     // Creates and returns all created entries in an array
     // If the entry is already found, it is append to the array.
     let skillsArr = await storeSkills(reqBody.skills);
-    console.log("Array of skills", skillsArr);
+
     // Method provided by sequelizer in case of a many-to-many relationship
     await jobOffer.setSkills(skillsArr);
   }
 
   return {
+    getJobById,
+    deleteJobById,
     storeDomain,
     createJob,
     createJobOffer,
