@@ -3,10 +3,19 @@ module.exports = (sequelize, DataTypes) => {
   const JobOffer = sequelize.define(
     "JobOffer",
     {
-      title: DataTypes.STRING,
+      title: { 
+        type: DataTypes.STRING,
+        primaryKey: true,
+      },
       description: DataTypes.STRING,
-      startDate: DataTypes.DATE,
-      endDate: DataTypes.DATE,
+      startDate: {
+        type: DataTypes.DATE,
+        primaryKey: true,
+      },
+      endDate: {
+        type: DataTypes.DATE,
+        primaryKey: true,
+      }
     },
     {}
   );
