@@ -4,6 +4,22 @@ const passport = require("passport");
 const jobsService = require("../services/jobs.service")();
 const { permit, isCompanyRecruiter } = require("../middlewares/permissions");
 
+router.get(
+  "/",
+  [passport.authenticate("jwt", { session: false }), permit('recruiter')],
+  async (req, res, next) => {
+    try {
+      let jobOffers = await jobsService.getCompanyJobs(req.user);
+      res.json(jobOffers);
+    } catch(err) {
+      res.status(500).send({
+        success: false,
+        message: "Could not retrieve job offers",
+      });
+    }
+  }
+);
+
 /**
  * Request Example: 
  * {
