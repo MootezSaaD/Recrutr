@@ -8,14 +8,8 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       description: DataTypes.STRING,
-      startDate: {
-        type: DataTypes.DATE,
-        primaryKey: true,
-      },
-      endDate: {
-        type: DataTypes.DATE,
-        primaryKey: true,
-      }
+      startDate: DataTypes.DATE,
+      endDate: DataTypes.DATE,
     },
     {}
   );
