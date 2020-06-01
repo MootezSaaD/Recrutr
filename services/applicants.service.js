@@ -3,6 +3,12 @@ const skillsService = require('../services/skills.service')();
 
 function applicantsService() {
 
+  async function getJobApplications(user) {
+    let applicant = await user.getApplicant();
+    let applications = await applicant.getApplications();
+    return applications;
+  }
+
   async function getApplicantSkills(user) {
     let applicant = await user.getApplicant();
     let applicantSkills = await applicant.getApplicantSkills();
@@ -16,6 +22,7 @@ function applicantsService() {
   }
 
   return {
+    getJobApplications,
     getApplicantSkills,
     setSkills
   };
