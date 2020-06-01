@@ -20,4 +20,39 @@ router.get(
   }
 );
 
+router.get(
+  "/skills",
+  [passport.authenticate("jwt", { session: false }), permit('applicant')],
+  async (req, res, next) => {
+    try {
+      let applicantSkills = await applicantsService.getApplicantSkills(req.user);
+      res.json(applicantSkills);
+    } catch(err) {
+      res.status(500).send({
+        success: false,
+        message: "Could not retrieve applicant skills",
+      });
+    }
+  }
+);
+
+router.post(
+  "/skills",
+  [passport.authenticate("jwt", { session: false }), permit('applicant')],
+  async (req, res, next) => {
+    try {
+      await applicantsService.setSkills(req.user, req.body.skills);
+      res.send({
+        success: true,
+        message: "Skills added to applicant",
+      });
+    } catch(err) {
+      res.status(500).send({
+        success: false,
+        message: "Could not set applicant skills",
+      });
+    }
+  }
+);
+
 module.exports = router;

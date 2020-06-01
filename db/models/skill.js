@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     "Skill",
     {
       name: DataTypes.STRING,
-      type: DataTypes.STRING,
     },
     {}
   );

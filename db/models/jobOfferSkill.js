@@ -2,7 +2,12 @@
 module.exports = (sequelize, DataTypes) => {
   const JobOfferSkill = sequelize.define(
     "JobOfferSkill",
-    {},
+    {
+      type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      } 
+    },
     {},
   );
   JobOfferSkill.associate = function (models) {

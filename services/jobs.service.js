@@ -1,4 +1,5 @@
-const { JobOffer, Domain, Skill } = require('../db/models');
+const { JobOffer, Domain } = require('../db/models');
+const skillsService = require('../services/skills.service')();
 const recruitersService = require('../services/recruiters.service')();
 
 function jobsService() {
@@ -49,26 +50,6 @@ function jobsService() {
     return JobOffer.create(jobOffer);
   }
 
-  async function storeSkill(skill) {
-    [skill, created] = await Skill.findOrCreate({
-      where: { name: skill.name, type: skill.type },
-      defaults: {
-        name: skill.name,
-        type: skill.type
-      },
-    });
-    return skill;
-  }
-
-  async function storeSkills(skills) {
-    let skillsArr = [];
-    for (const skill of skills) {
-      const result = await storeSkill(skill);
-      skillsArr.push(result);
-    }
-    return skillsArr;
-  }
-
   async function createJob(reqBody, user) {
     let recruiter = await recruitersService.getRecruiter(user.email);
     let company = await recruiter.getCompany();
@@ -88,12 +69,10 @@ function jobsService() {
     await jobOffer.setDomain(domain);
     await jobOffer.setCompany(company);
 
-    // Creates and returns all created entries in an array
-    // If the entry is already found, it is append to the array.
-    let skillsArr = await storeSkills(reqBody.skills);
-
-    // Method provided by sequelizer in case of a many-to-many relationship
-    await jobOffer.setSkills(skillsArr);
+    for (const skill of reqBody.skills) {
+      let storedSkill = await skillsService.storeSkill(skill);
+      await jobOffer.addSkill(storedSkill, { through: {type: skill.type} });
+    }
   }
 
   return {
