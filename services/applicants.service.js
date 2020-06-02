@@ -18,7 +18,7 @@ function applicantsService() {
   async function setSkills(user, skills) {
     let applicant = await user.getApplicant();
     let skillsArr = await skillsService.storeSkills(skills);
-    await applicant.setApplicantSkills(skillsArr);
+    await applicant.setSkills(skillsArr);
   }
 
   return {
