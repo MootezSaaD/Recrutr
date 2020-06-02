@@ -7,9 +7,9 @@ router.post("/register", async (req, res, next) => {
   const resBody = req.body;
   try {
     const user = await UsersService.register(resBody);
-    res.json({ success: true, msg: "User registered" });
+    res.json({ success: true, message: "User registered" });
   } catch (err) {
-    res.status(400).json({ success: false, msg: "Failed to register" });
+    res.status(400).json({ success: false, message: "Failed to register" });
   }
 });
 
@@ -20,7 +20,7 @@ router.post("/authenticate", async (req, res, next) => {
     res.json(user);
   } catch (err) {
     console.log("err", err);
-    res.status(400).json({ success: false, msg: "Failed to login" });
+    res.status(400).json({ success: false, message: "Failed to login" });
   }
 });
 
@@ -32,7 +32,7 @@ router.get("/@me",
       console.log(user);
       res.json(user);
     } catch (err) {
-      res.status(400).json({ success: false, msg: "Failed to retrieve user profile" });
+      res.status(400).json({ success: false, message: "Failed to retrieve user profile" });
     }
   }
 );
