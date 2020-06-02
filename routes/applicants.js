@@ -71,4 +71,39 @@ router.post(
   }
 );
 
+router.get(
+  "/work-experiences",
+  [passport.authenticate("jwt", { session: false }), permit('applicant')],
+  async (req, res, next) => {
+    try {
+      let applicantWorkExperience = await applicantsService.getWorkExperiences(req.user);
+      res.json(applicantWorkExperience);
+    } catch(err) {
+      res.status(500).send({
+        success: false,
+        message: "Could not retrieve work experiences",
+      });
+    }
+  }
+);
+
+router.post(
+  "/work-experiences",
+  [passport.authenticate("jwt", { session: false }), permit('applicant')],
+  async (req, res, next) => {
+    try {
+      await applicantsService.addWorkExperience(req.user, req.body);
+      res.send({
+        success: true,
+        message: "Work experience added",
+      });
+    } catch(err) {
+      res.status(500).send({
+        success: false,
+        message: "Could not add work experiences",
+      });
+    }
+  }
+);
+
 module.exports = router;

@@ -1,5 +1,6 @@
 const { Applicant } = require("../db/models");
 const jobsService = require('../services/jobs.service')();
+const domainsService = require('../services/domains.service')();
 const skillsService = require('../services/skills.service')();
 
 function applicantsService() {
@@ -28,11 +29,32 @@ function applicantsService() {
     await applicant.setSkills(skillsArr);
   }
 
+
+  async function getWorkExperiences(user) {
+    let applicant = await user.getApplicant();
+    let workExperience = await applicant.getWorkExperiences();
+    return workExperience;
+  }
+
+  async function addWorkExperience(user, workExperience) {
+    let applicant = await user.getApplicant();
+    let domain = await domainsService.storeDomain(workExperience.domain);
+    let applicantWorkExperience = await applicant.createWorkExperience({
+      jobTitle: workExperience.jobTitle,
+      companyName: workExperience.companyName,
+      startDate: workExperience.startDate,
+      endDate: workExperience.endDate,
+    });
+    await applicantWorkExperience.setDomain(domain);
+  }
+
   return {
     getJobApplications,
     addJobApplication,
     getApplicantSkills,
-    setSkills
+    setSkills,
+    getWorkExperiences,
+    addWorkExperience
   };
 }
 
