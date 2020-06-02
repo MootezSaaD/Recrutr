@@ -22,7 +22,7 @@ function jobsService() {
         let s = await jobOfferSkill.getSkill().then(skill => skill.toJSON());
         delete s.createdAt;
         delete s.updatedAt;
-        skillsArr.push(s)
+        skillsArr.push({ name: s.name, type: jobOfferSkill.type })
       }
       finalJobOffers.push(
         Object.assign(jobOffer.toJSON(), {
