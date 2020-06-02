@@ -1,5 +1,6 @@
-const { JobOffer, Domain } = require('../db/models');
+const { JobOffer } = require('../db/models');
 const skillsService = require('../services/skills.service')();
+const domainsService = require('../services/domains.service')();
 const recruitersService = require('../services/recruiters.service')();
 
 function jobsService() {
@@ -41,17 +42,6 @@ function jobsService() {
     return JobOffer.destroy({ where: query });
   }
 
-  // Assuming domain is an object, this would be the correct syntax
-  async function storeDomain(domainName) {
-    [domain, created] = await Domain.findOrCreate({
-      where: { name: domainName },
-      defaults: {
-        name: domainName,
-      },
-    });
-    return domain;
-  }
-
   async function createJobOffer(jobOffer) {
     return JobOffer.create(jobOffer);
   }
@@ -61,7 +51,7 @@ function jobsService() {
     let company = await recruiter.getCompany();
 
     // Create domain (didn't use the special method between models since I don't how it handles duplicates)
-    let domain = await storeDomain(reqBody.domain);
+    let domain = await domainsService.storeDomain(reqBody.domain);
 
     // Create job offer
     let jobOffer = await createJobOffer({
@@ -85,7 +75,6 @@ function jobsService() {
     getJobById,
     getJobs,
     deleteJobById,
-    storeDomain,
     createJob,
     createJobOffer,
   };
