@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
   JobOffer.associate = function (models) {
     JobOffer.belongsTo(models.Company);
     JobOffer.belongsTo(models.Domain);
+
+    JobOffer.belongsToMany(models.Applicant, { through: models.Application });
     JobOffer.hasMany(models.Application);
 
     JobOffer.belongsToMany(models.Skill, { through: models.JobOfferSkill });

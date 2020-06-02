@@ -14,7 +14,23 @@ router.get(
     } catch(err) {
       res.status(500).send({
         success: false,
-        message: "Could not retrieve job applications",
+        message: "Could not retrieve job application",
+      });
+    }
+  }
+);
+
+router.put(
+  "/jobs/:jobId",
+  [passport.authenticate("jwt", { session: false }), permit('applicant')],
+  async (req, res, next) => {
+    try {
+      await applicantsService.addJobApplication(req.user, req.params.jobId);
+      res.send({success: true});
+    } catch(err) {
+      res.status(500).send({
+        success: false,
+        message: "Could not add applications",
       });
     }
   }
