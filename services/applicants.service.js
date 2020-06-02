@@ -1,4 +1,4 @@
-const { Applicant } = require("../db/models");
+const { Applicant, JobOffer } = require("../db/models");
 const jobsService = require('../services/jobs.service')();
 const domainsService = require('../services/domains.service')();
 const skillsService = require('../services/skills.service')();
@@ -7,8 +7,21 @@ function applicantsService() {
 
   async function getJobOffers(user) {
     let applicant = await user.getApplicant();
-    let applications = await applicant.getJobOffers();
-    return applications;
+    let applications = await applicant.getApplications();
+    let applicationsArr = [];
+    for(let application of applications) {
+      let jobOffer = await JobOffer.findByPk(application.JobOfferId);
+      let company = await jobOffer.getCompany();
+      let domain = await jobOffer.getDomain();
+      applicationsArr.push({
+        title: jobOffer.title,
+        company: company.name,
+        description: jobOffer.description,
+        status: application.status,
+        applicationDate: application.createdAt
+      })
+    }
+    return applicationsArr;
   }
 
   async function addJobApplication(user, jobId) {
