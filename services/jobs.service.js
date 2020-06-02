@@ -27,8 +27,8 @@ function jobsService() {
       finalJobOffers.push(
         Object.assign(jobOffer.toJSON(), {
           skills: skillsArr,
-          company: jobDomain.name,
-          domain: jobCompany.name,
+          company: jobCompany.name,
+          domain: jobDomain.name,
         })
       );
     }
