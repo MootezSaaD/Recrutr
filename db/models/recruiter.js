@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Recruiter.associate = function (models) {
-    Recruiter.belongsTo(models.User);
+    Recruiter.belongsTo(models.User, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
     Recruiter.belongsTo(models.Company);
   };
   return Recruiter;

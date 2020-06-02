@@ -16,12 +16,8 @@ module.exports = (sequelize, DataTypes) => {
     role: DataTypes.STRING
   }, {});
   User.associate = function(models) {
-    User.hasOne(models.Applicant, {
-      foreignKey: {
-        allowNull: false
-      }
-    });
-    User.hasOne(models.Recruiter);
+    User.hasOne(models.Applicant, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+    User.hasOne(models.Recruiter, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
   };
   return User;
 };

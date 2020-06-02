@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     });
-    Application.belongsTo(models.JobOffer);
+    Application.belongsTo(models.JobOffer, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
   };
   return Application;
 };

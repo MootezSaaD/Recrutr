@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Applicant.associate = function (models) {
-    Applicant.belongsTo(models.User);
+    Applicant.belongsTo(models.User, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
     
     Applicant.belongsToMany(models.JobOffer, { through: models.Application });
     Applicant.hasMany(models.Application);

@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     JobOffer.belongsTo(models.Domain);
 
     JobOffer.belongsToMany(models.Applicant, { through: models.Application });
-    JobOffer.hasMany(models.Application);
+    JobOffer.hasMany(models.Application, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 
     JobOffer.belongsToMany(models.Skill, { through: models.JobOfferSkill });
     JobOffer.hasMany(models.JobOfferSkill);
