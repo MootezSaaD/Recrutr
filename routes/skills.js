@@ -8,7 +8,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     let skills = await Skill.findAll({
-      attributes: ['id', 'name', 'type'],
+      attributes: ['id', 'name'],
     });
     res.status(200).json(skills);
   }

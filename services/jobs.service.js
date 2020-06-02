@@ -14,6 +14,8 @@ function jobsService() {
     });
     let finalJobOffers = [];
     for(let jobOffer of jobsOffers) {
+      let jobDomain = await jobOffer.getDomain();
+      let jobCompany = await jobOffer.getCompany();
       let jobOfferSkills = await jobOffer.getJobOfferSkills();
       let skillsArr = [];
       for(let jobOfferSkill of jobOfferSkills) {
@@ -23,7 +25,11 @@ function jobsService() {
         skillsArr.push(s)
       }
       finalJobOffers.push(
-        Object.assign(jobOffer.toJSON(), { skills: skillsArr })
+        Object.assign(jobOffer.toJSON(), {
+          skills: skillsArr,
+          company: jobDomain.name,
+          domain: jobCompany.name,
+        })
       );
     }
 
