@@ -9,7 +9,7 @@ router.get(
   [passport.authenticate("jwt", { session: false }), permit('applicant')],
   async (req, res, next) => {
     try {
-      let jobApplications = await applicantsService.getJobApplications(req.user);
+      let jobApplications = await applicantsService.getJobOffers(req.user);
       res.json(jobApplications);
     } catch(err) {
       res.status(500).send({
@@ -26,7 +26,10 @@ router.put(
   async (req, res, next) => {
     try {
       await applicantsService.addJobApplication(req.user, req.params.jobId);
-      res.send({success: true});
+      res.send({
+        success: true,
+        message: 'Application added to applicant',
+      });
     } catch(err) {
       res.status(500).send({
         success: false,
