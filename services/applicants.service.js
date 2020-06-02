@@ -18,7 +18,7 @@ function applicantsService() {
 
   async function getApplicantSkills(user) {
     let applicant = await user.getApplicant();
-    let applicantSkills = await applicant.getApplicantSkills();
+    let applicantSkills = await applicant.getSkills();
     return applicantSkills;
   }
 
