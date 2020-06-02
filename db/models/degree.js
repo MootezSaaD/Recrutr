@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
   Degree.associate = function (models) {
     Degree.belongsToMany(models.Applicant, { through: models.ApplicantDegree });
     Degree.hasMany(models.ApplicantDegree);
+
+    Degree.belongsTo(models.Domain);
   };
   return Degree;
 };
