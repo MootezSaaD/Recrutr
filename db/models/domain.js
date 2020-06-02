@@ -6,6 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   Domain.associate = function(models) {
     Domain.hasOne(models.JobOffer);
     Domain.hasOne(models.WorkExperience);
+
+    Domain.hasMany(models.Degree);
   };
   return Domain;
 };

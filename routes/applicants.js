@@ -100,7 +100,43 @@ router.post(
     } catch(err) {
       res.status(500).send({
         success: false,
-        message: "Could not add work experiences",
+        message: "Could not add work experience",
+      });
+    }
+  }
+);
+
+
+router.get(
+  "/degrees",
+  [passport.authenticate("jwt", { session: false }), permit('applicant')],
+  async (req, res, next) => {
+    try {
+      let applicantDegrees = await applicantsService.getDegrees(req.user);
+      res.json(applicantDegrees);
+    } catch(err) {
+      res.status(500).send({
+        success: false,
+        message: "Could not retrieve degrees",
+      });
+    }
+  }
+);
+
+router.post(
+  "/degree",
+  [passport.authenticate("jwt", { session: false }), permit('applicant')],
+  async (req, res, next) => {
+    try {
+      await applicantsService.addDegree(req.user, req.body);
+      res.send({
+        success: true,
+        message: "Degree added",
+      });
+    } catch(err) {
+      res.status(500).send({
+        success: false,
+        message: "Could not add degree",
       });
     }
   }

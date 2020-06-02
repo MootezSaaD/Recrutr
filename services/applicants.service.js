@@ -48,13 +48,30 @@ function applicantsService() {
     await applicantWorkExperience.setDomain(domain);
   }
 
+  async function getDegrees(user) {
+    let applicant = await user.getApplicant();
+    let applicantDegrees = await applicant.getDegrees();
+    return applicantDegrees;
+  }
+
+  async function addDegree(user, degree) {
+    let applicant = await user.getApplicant();
+    let domain = await domainsService.storeDomain(degree.domain);
+    await applicant.createDegree({
+      type: degree.type,
+      DomainId: domain.id,
+    });
+  }
+
   return {
     getJobApplications,
     addJobApplication,
     getApplicantSkills,
     setSkills,
     getWorkExperiences,
-    addWorkExperience
+    addWorkExperience,
+    getDegrees,
+    addDegree
   };
 }
 
