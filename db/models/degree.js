@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     "Degree",
     {
       type: {
-        type: DataTypes.ENUM("Bsc", "MSc", "PhD"),
+        type: DataTypes.ENUM("BSc", "MSc", "PhD"),
       },
     },
     {}

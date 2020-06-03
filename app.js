@@ -23,7 +23,6 @@ app.use(passport.session());
 
 require("./config/passport")(passport);
 
-// Temporary error handler
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   if (!err.statusCode) err.statusCode = 500;

@@ -60,7 +60,7 @@ router.post(
   [passport.authenticate("jwt", { session: false }), permit('applicant')],
   async (req, res, next) => {
     try {
-      await applicantsService.setSkills(req.user, req.body.skills);
+      await applicantsService.setSkills(req.user, req.body);
       res.send({
         success: true,
         message: "Skills added to applicant",
