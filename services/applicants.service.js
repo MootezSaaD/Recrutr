@@ -64,7 +64,18 @@ function applicantsService() {
   async function getDegrees(user) {
     let applicant = await user.getApplicant();
     let applicantDegrees = await applicant.getDegrees();
-    return applicantDegrees;
+    let degreesArr = [];
+    for(let degree of applicantDegrees) {
+      let degreeDomain = await degree.getDomain();
+      console.log(degreeDomain);
+      degreesArr.push({
+        id: degree.id,
+        applicantID: applicant.id,
+        type: degree.type,
+        domain: degreeDomain.name
+      })
+    }
+    return degreesArr;
   }
 
   async function addDegree(user, degree) {
