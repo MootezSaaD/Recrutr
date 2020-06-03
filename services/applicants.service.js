@@ -1,9 +1,29 @@
-const { Applicant, JobOffer } = require("../db/models");
+const { Applicant, Application, JobOffer } = require("../db/models");
 const jobsService = require('../services/jobs.service')();
 const domainsService = require('../services/domains.service')();
 const skillsService = require('../services/skills.service')();
 
 function applicantsService() {
+
+  async function getApplicantById(applicantId) {
+    let applicant = await Applicant.findByPk(applicantId);
+    return applicant;
+  }
+
+  async function getApplicationByIds(applicantId, jobOfferId) {
+    let application = await Application.findOne(
+      { where : {
+        ApplicantId: application.id,
+        JobOfferId: jobOfferId,
+      }}
+    );
+    return application;
+  }
+
+  async function updateApplicationStatus(application, status) {
+    application.status = status;
+    await application.save();
+  }
 
   async function getJobOffers(user) {
     let applicant = await user.getApplicant();
@@ -88,6 +108,9 @@ function applicantsService() {
   }
 
   return {
+    getApplicantById,
+    getApplicationByIds,
+    updateApplicationStatus,
     getJobOffers,
     addJobApplication,
     getApplicantSkills,
