@@ -50,6 +50,20 @@ function usersService() {
     }
   }
 
+  function generateTokens(userEmail) {
+    const accessToken = jwt.sign(
+      { email: userEmail },
+      config.secret, 
+      { expiresIn: config.tokenExpiration }
+    );
+    const refreshToken = jwt.sign(
+      { email: userEmail },
+      config.refreshTokenSecret,
+      { expiresIn: config.refreshTokenExpiration }
+    );
+    return { accessToken, refreshToken }
+  } 
+
   async function register(resBody) {
     let newUser = {
       firstName: resBody.firstName.trim(),
@@ -72,35 +86,48 @@ function usersService() {
   }
 
   async function login(resBody) {
-    const user = await getUserByEmail(resBody.email);
+    let user = await getUserByEmail(resBody.email);
     if (!user) {
       throw Error("User not found");
     }
+
     const match = await bcrypt.compare(resBody.password, user.password);
     if (!match) throw Error;
-    const token = jwt.sign(user.toJSON(), config.secret, {
-      expiresIn: config.tokenExpiration,
-    });
     let userInfo = await getRole(user);
+
+    const { accessToken, refreshToken } = generateTokens(user.email);
+
     return {
       user: {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
         ...userInfo,
-        token: token,
+        accessToken,
+        refreshToken
       },
     };
   }
 
+  async function refreshToken(refreshToken) {
+    let decoded = jwt.verify(refreshToken, config.refreshTokenSecret);
+    if (!decoded) {
+        throw Error("Invalid refresh token");
+    }
+    let user = await getUserByEmail(decoded.email);
+    if (!user) {
+      throw Error("Invalid refresh token");
+    }
+    const tokens = generateTokens(user.email);
+    return tokens;
+  }
+
   return {
-    getUserById,
     getUserByEmail,
-    addUser,
     getProfile,
     register,
     login,
-    getRole
+    refreshToken
   };
 }
 

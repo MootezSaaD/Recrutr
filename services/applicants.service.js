@@ -87,7 +87,6 @@ function applicantsService() {
     let degreesArr = [];
     for(let degree of applicantDegrees) {
       let degreeDomain = await degree.getDomain();
-      console.log(degreeDomain);
       degreesArr.push({
         id: degree.id,
         applicantID: applicant.id,

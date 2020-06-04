@@ -11,7 +11,6 @@ module.exports = {
     dialectOptions: {
       timezone: process.env.db_timezone
     },
-    logging: false,
   },
   test: {
     username: process.env.DB_USERNAME,
