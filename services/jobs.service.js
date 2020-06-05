@@ -14,16 +14,16 @@ function jobsService() {
       attributes: { exclude: ['createdAt', 'updatedAt'] },
     });
     let finalJobOffers = [];
-    for(let jobOffer of jobsOffers) {
+    for (let jobOffer of jobsOffers) {
       let jobDomain = await jobOffer.getDomain();
       let jobCompany = await jobOffer.getCompany();
       let jobOfferSkills = await jobOffer.getJobOfferSkills();
       let skillsArr = [];
-      for(let jobOfferSkill of jobOfferSkills) {
-        let s = await jobOfferSkill.getSkill().then(skill => skill.toJSON());
+      for (let jobOfferSkill of jobOfferSkills) {
+        let s = await jobOfferSkill.getSkill().then((skill) => skill.toJSON());
         delete s.createdAt;
         delete s.updatedAt;
-        skillsArr.push({ name: s.name, type: jobOfferSkill.type })
+        skillsArr.push({ name: s.name, type: jobOfferSkill.type });
       }
       finalJobOffers.push(
         Object.assign(jobOffer.toJSON(), {
@@ -67,7 +67,7 @@ function jobsService() {
 
     for (const skill of reqBody.skills) {
       let storedSkill = await skillsService.storeSkill(skill);
-      await jobOffer.addSkill(storedSkill, { through: {type: skill.type} });
+      await jobOffer.addSkill(storedSkill, { through: { type: skill.type } });
     }
   }
 

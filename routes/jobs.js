@@ -1,27 +1,27 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const passport = require("passport");
-const jobsService = require("../services/jobs.service")();
-const { permit, isCompanyRecruiter } = require("../middlewares/permissions");
+const passport = require('passport');
+const jobsService = require('../services/jobs.service')();
+const { permit, isCompanyRecruiter } = require('../middlewares/permissions');
 
 router.get(
-  "/",
-  [passport.authenticate("jwt", { session: false })],
+  '/',
+  [passport.authenticate('jwt', { session: false })],
   async (req, res, next) => {
     try {
       let jobOffers = await jobsService.getJobs(req.user);
       res.json(jobOffers);
-    } catch(err) {
+    } catch (err) {
       res.status(500).send({
         success: false,
-        message: "Could not retrieve job offers",
+        message: 'Could not retrieve job offers',
       });
     }
   }
 );
 
 /**
- * Request Example: 
+ * Request Example:
  * {
  *  "domain": "Software Engineering",
  *  "title": "Data Analyst",
@@ -33,34 +33,38 @@ router.get(
  *    "2": "Statistics",
  *    "3": "Python"
  * }
-*/
+ */
 router.post(
-  "/create",
-  [passport.authenticate("jwt", { session: false }), permit('recruiter')],
+  '/create',
+  [passport.authenticate('jwt', { session: false }), permit('recruiter')],
   async (req, res, next) => {
     try {
       await jobsService.createJob(req.body, req.user);
       res.send({ success: true });
-    } catch(err) {
+    } catch (err) {
       res.status(401).send({
         success: false,
-        message: "Could not create job offer",
+        message: 'Could not create job offer',
       });
     }
   }
 );
 
 router.delete(
-  "/:jobId",
-  [passport.authenticate("jwt", { session: false }), permit('recruiter'), isCompanyRecruiter],
+  '/:jobId',
+  [
+    passport.authenticate('jwt', { session: false }),
+    permit('recruiter'),
+    isCompanyRecruiter,
+  ],
   async (req, res, next) => {
     try {
       await jobsService.deleteJobById(req.params.jobId);
-      res.send({ success: true });
-    } catch(err) {
+      res.send({ success: true, message: 'Job Offer deleted !' });
+    } catch (err) {
       res.status(401).send({
         success: false,
-        message: "Could not delete job offer",
+        message: 'Could not delete job offer',
       });
     }
   }
